@@ -40,10 +40,11 @@ export default function Dashboard() {
     setNewExpense({ date: '', category: '', details: '', amount: '' });
     toast({
       title: "Expense added",
-      description: `$${expense.amount} added to ${expense.category}`,
+      description: `₦{expense.amount} added to ₦{expense.category}`,
     });
   };
 
+  
   // Calculate expense data for the pie chart
   const expenseData = expenses.reduce((acc, expense) => {
     const existingCategory = acc.find(item => item.name === expense.category);
@@ -60,23 +61,82 @@ export default function Dashboard() {
       <h1 className="text-3xl font-bold mb-6">Family Finance Dashboard</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Family Fund</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">${familyFund.toFixed(2)}</p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader>
-            <CardTitle>Child Allowance</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">${childAllowance.toFixed(2)}</p>
-          </CardContent>
-        </Card>
+      <Card>
+  <CardHeader>
+    <CardTitle>Family Fund</CardTitle>
+  </CardHeader>
+  <CardContent>
+    <p className="text-2xl font-bold">₦{familyFund.toFixed(2)}</p>
+    <form onSubmit={(e) => handleDepositSubmit(e, 'Family Fund')}>
+      <div>
+        <Label htmlFor="amount">Amount</Label>
+        <Input
+          id="amount"
+          type="number"
+          value={newDeposit.amount}
+          onChange={(e) => setNewDeposit({ ...newDeposit, amount: e.target.value })}
+          required
+        />
+      </div>
+      <Button type="submit">Add Deposit</Button>
+    </form>
+  </CardContent>
+</Card>
+
+<Card>
+  <CardHeader>
+    <CardTitle>Child Allowance</CardTitle>
+  </CardHeader>
+  <CardContent>
+    <p className="text-2xl font-bold">₦{childAllowance.toFixed(2)}</p>
+    <form onSubmit={(e) => handleDepositSubmit(e, 'Child Allowance')}>
+      <div>
+        <Label htmlFor="amount">Amount</Label>
+        <Input
+          id="amount"
+          type="number"
+          value={newDeposit.amount}
+          onChange={(e) => setNewDeposit({ ...newDeposit, amount: e.target.value })}
+          required
+        />
+      </div>
+      <Button type="submit">Add Deposit</Button>
+    </form>
+    <form onSubmit={(e) => handleExpenseSubmit(e)}>
+      <div>
+        <Label htmlFor="category">Category</Label>
+        <Input
+          id="category"
+          type="text"
+          value={newExpense.category}
+          onChange={(e) => setNewExpense({ ...newExpense, category: e.target.value })}
+          required
+        />
+      </div>
+      <div>
+        <Label htmlFor="details">Details</Label>
+        <Input
+          id="details"
+          type="text"
+          value={newExpense.details}
+          onChange={(e) => setNewExpense({ ...newExpense, details: e.target.value })}
+          required
+        />
+      </div>
+      <div>
+        <Label htmlFor="amount">Amount</Label>
+        <Input
+          id="amount"
+          type="number"
+          value={newExpense.amount}
+          onChange={(e) => setNewExpense({ ...newExpense, amount: e.target.value })}
+          required
+        />
+      </div>
+      <Button type="submit">Expense</Button>
+    </form>
+  </CardContent>
+</Card>
       </div>
 
       <Card className="mb-6">
@@ -172,7 +232,7 @@ export default function Dashboard() {
               {expenses.slice(-5).reverse().map((expense) => (
                 <li key={expense.id} className="flex justify-between items-center">
                   <span>{expense.date} - {expense.category}</span>
-                  <span className="font-bold">${expense.amount.toFixed(2)}</span>
+                  <span className="font-bold">₦{expense.amount.toFixed(2)}</span>
                 </li>
               ))}
             </ul>
