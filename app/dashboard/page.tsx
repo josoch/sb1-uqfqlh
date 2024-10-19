@@ -44,7 +44,60 @@ export default function Dashboard() {
     });
   };
 
+  // ...
   
+  const [newDeposit, setNewDeposit] = useState({ type: '', amount: '' });
+  
+  const handleDepositSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const response = await fetch('/api/deposits', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ amount: newDeposit.amount, fundType: newDeposit.type }),
+    });
+    if (response.ok) {
+      // Handle successful deposit submission
+      setNewDeposit({ type: '', amount: '' });
+    } else {
+      // Handle error
+      console.error('Failed to add deposit');
+    }
+  };
+  
+  // ...
+  
+  <Card>
+    <CardHeader>
+      <CardTitle>Family Fund</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <p className="text-2xl font-bold">₦{familyFund.toFixed(2)}</p>
+      <form onSubmit={handleDepositSubmit}>
+        <div>
+          <Label htmlFor="type">Type</Label>
+          <Select id="type" value={newDeposit.type} onChange={(e) => setNewDeposit({ ...newDeposit, type: e.target.value })}>
+            <SelectItem value="Family Fund">Family Fund</SelectItem>
+            <SelectItem value="Child Allowance">Child Allowance</SelectItem>
+          </Select>
+        </div>
+        <div>
+          <Label htmlFor="amount">Amount</Label>
+          <Input
+            id="amount"
+            type="number"
+            value={newDeposit.amount}
+            onChange={(e) => setNewDeposit({ ...newDeposit, amount: e.target.value })}
+            required
+          />
+        </div>
+        <Button type="submit">Add Deposit</Button>
+      </form>
+    </CardContent>
+  </Card>
+  
+  // ...
   // Calculate expense data for the pie chart
   const expenseData = expenses.reduce((acc, expense) => {
     const existingCategory = acc.find(item => item.name === expense.category);
@@ -100,40 +153,7 @@ export default function Dashboard() {
           required
         />
       </div>
-      <Button type="submit">Add Deposit</Button>
-    </form>
-    <form onSubmit={(e) => handleExpenseSubmit(e)}>
-      <div>
-        <Label htmlFor="category">Category</Label>
-        <Input
-          id="category"
-          type="text"
-          value={newExpense.category}
-          onChange={(e) => setNewExpense({ ...newExpense, category: e.target.value })}
-          required
-        />
-      </div>
-      <div>
-        <Label htmlFor="details">Details</Label>
-        <Input
-          id="details"
-          type="text"
-          value={newExpense.details}
-          onChange={(e) => setNewExpense({ ...newExpense, details: e.target.value })}
-          required
-        />
-      </div>
-      <div>
-        <Label htmlFor="amount">Amount</Label>
-        <Input
-          id="amount"
-          type="number"
-          value={newExpense.amount}
-          onChange={(e) => setNewExpense({ ...newExpense, amount: e.target.value })}
-          required
-        />
-      </div>
-      <Button type="submit">Expense</Button>
+      <Button type="submit">Add Allowance</Button>
     </form>
   </CardContent>
 </Card>
